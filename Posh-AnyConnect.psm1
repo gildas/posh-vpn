@@ -7,12 +7,14 @@ if ($PSVersionTable.PSVersion.Major -lt 3)
 }
 
 Push-Location $PSScriptRoot
+. .\Get-AnyConnectStatus.ps1
 . .\Disconnect-AnyConnect.ps1
 . .\Connect-AnyConnect.ps1
 Pop-Location
 
 Export-ModuleMember `
   -Function @(
-    Connect-AnyConnect,
-    Disconnect-AnyConnect
+    'Get-AnyConnectStatus',
+    'Connect-AnyConnect',
+    'Disconnect-AnyConnect'
   )
