@@ -1,4 +1,3 @@
-
 function Connect-AnyConnect() # {{{
 {
   [CmdletBinding()]
@@ -14,92 +13,71 @@ function Connect-AnyConnect() # {{{
   )
   $AnyConnectPath = Join-Path ${env:ProgramFiles(x86)} (Join-Path 'Cisco' 'Cisco AnyConnect Secure Mobility Client')
 
-  # Get the current AnyConnec status
-  #$process = Start-Process -FilePath (Join-Path $AnyConnectPath 'vpncli.exe') -ArgumentList "state" -WindowStyle Minimized -PassThru
-  # Must be " >> stazte: Disconnected"
-  # If not disconnect
-  Disconnect-AnyConnect
+  # Disconnect as needed
+  if ((Get-AnyConnectStatus -Verbose:$Verbose) -ne 'Disconnected')
+  {
+    Disconnect-AnyConnect -Verbose:$Verbose
+  }
 
   # First Stop any VPN cli and ui
   # There must be only one "client" running when connecting
-  Get-Process | Where ProcessName -match 'vpn(ui|cli)' | ForEach { Stop-Process $_.Id }
+  Get-Process | Where ProcessName -match 'vpn(ui|cli)' | ForEach {
+    if (! $_.HasExited)
+    {
+      Write-Verbose "Stopping process $($_.Name) (pid: $($_.Id))"
+      Stop-Process $_.Id
+    }
+    else
+    {
+      Write-Verbose "Process $($_.Name) is exiting (pid: $($_.Id))"
+    }
+  }
 
-  Write-Verbose "Starting the VPN cli"
+  Write-Verbose "Starting the AnyConnect cli"
   $vpncli = New-Object System.Diagnostics.Process
   $vpncli.StartInfo = New-Object System.Diagnostics.ProcessStartInfo(Join-Path $AnyConnectPath 'vpncli.exe')
-  $vpncli.StartInfo.Arguments = "connect ${ComputerName}"
-  $vpncli.StartInfo.CreateNoWindow  = $false
+  $vpncli.StartInfo.Arguments = "-s"
+  $vpncli.StartInfo.CreateNoWindow  = $true
   $vpncli.StartInfo.UseShellExecute = $false
   $vpncli.StartInfo.RedirectStandardInput  = $true
   $vpncli.StartInfo.RedirectStandardOutput = $true
-  $vpncli.StartInfo.RedirectStandardError  = $true
-  $vpncli.Start()
+  #$vpncli.StartInfo.RedirectStandardError  = $true
+
+  if (! $vpncli.Start())
+  {
+    Throw "Cannot start AnyConnect Client, error: $LASTEXITCODE"
+  }
 
   Write-Verbose "Waiting for process to be ready"
   Start-Sleep 2
 
-  Write-Verbose "Reading its output"
-  for ($output = $vpncli.StandardOutput.ReadLine(); $output -ne $null; $output = $vpncli.StandardOutput.ReadLine())
-  {
-      Write-Verbose $output
-  }
-  for ($output = $vpncli.StandardError.ReadLine(); $output -ne $null; $output = $vpncli.StandardError.ReadLine())
-  {
-      Write-Verbose $output
-  }
-  #Write-Verbose "Sending connect command"
-  #$vpncli.StandardInput.WriteLine("connect ${ComputerName}")
-  #Write-Verbose "Reading its output"
-  #for ($output = $vpncli.StandardOutput.ReadLine(); $output -notmatch "^VPN>.*"; $output = $vpncli.StandardOutput.ReadLine())
-  #{
-  #  Write-Verbose $output
-  #}
-  Start-Sleep 2
+  Write-Verbose "Sending connect"
+  $vpncli.StandardInput.WriteLine('connect ' + $ComputerName)
+
   Write-Verbose "Sending user"
   $vpncli.StandardInput.WriteLine($User)
-  Write-Verbose "Reading its output"
-  for ($output = $vpncli.StandardOutput.ReadLine(); $output -ne $null; $output = $vpncli.StandardOutput.ReadLine())
-  {
-    Write-Verbose $output
-  }
+
   Write-Verbose "Sending password"
   $vpncli.StandardInput.WriteLine($Password)
-  Write-Verbose "Reading its output"
+
+  Write-Verbose "Reading its output stream"
+  $found = $false
   for ($output = $vpncli.StandardOutput.ReadLine(); $output -ne $null; $output = $vpncli.StandardOutput.ReadLine())
   {
-    Write-Verbose $output
+    Write-Debug $output
+    if ($output -match '  >> note: (.*)')
+    {
+      Write-Warning $matches[1]
+    }
+    elseif ($output -match '  >> state: (.*)')
+    {
+      $state = $matches[1]
+      Write-Verbose $state
+      if ($state -eq 'Connected')
+      {
+        break
+      }
+    }
   }
-  # Read StandardOutput.ReadLine()
-  # until:
-  #VPN>
-  #  >> registered with local VPN subsystem.
-  #
-  #
-  #VPN>
-  # until ReadLine() is $null
-
   Start-Process -FilePath (Join-Path $AnyConnectPath 'vpnui.exe')
-  return $vpncli
 } #}}}
-
-#VPN> connect indvpn.inin.com
-#  >> contacting host (indvpn.inin.com) for login information...
-#  >> notice: Contacting indvpn.inin.com.
-#
-#  >> Please enter your username and password.
-#
-#Username: [apac\gildas.cherruel]
-#Password: **********
-#  >> notice: Establishing VPN session...
-#  >> notice: Checking for profile updates...
-#  >> notice: Checking for product updates...
-#  >> notice: Checking for customization updates...
-#  >> notice: Performing any required updates...
-#  >> notice: Establishing VPN - Examining system...
-#  >> notice: Establishing VPN - Activating VPN adapter...
-#  >> state: Connecting
-#  >> notice: Establishing VPN session...
-#  >> notice: Establishing VPN - Configuring system...
-#  >> notice: Establishing VPN...
-#  >> state: Connected
-#  >> notice: Connected to indvpn.inin.com.
