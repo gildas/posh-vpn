@@ -19,7 +19,7 @@ function Get-AnyConnectStatus() # {{{
   Write-Verbose "Reading its output"
   for ($output = $vpncli.StandardOutput.ReadLine(); $output -ne $null; $output = $vpncli.StandardOutput.ReadLine())
   {
-      Write-Verbose "OUTPUT: $output"
+      Write-Debug $output
       if ($output -match '  >> note: (.*)')
       {
         Write-Warning $matches[1]
@@ -28,11 +28,12 @@ function Get-AnyConnectStatus() # {{{
       if ($output -match '  >> state: (.*)')
       {
         $status = $matches[1]
+        Write-Verbose $status
       }
   }
   for ($output = $vpncli.StandardError.ReadLine(); $output -ne $null; $output = $vpncli.StandardError.ReadLine())
   {
-      Write-Verbose "ERROR:  $output"
+      Write-Warning $output
   }
   return $status
 } #}}}
