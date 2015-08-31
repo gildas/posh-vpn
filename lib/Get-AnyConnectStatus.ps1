@@ -5,10 +5,10 @@ function Get-AnyConnectStatus() # {{{
   )
   $AnyConnectPath = Join-Path ${env:ProgramFiles(x86)} (Join-Path 'Cisco' 'Cisco AnyConnect Secure Mobility Client')
 
-  Write-Verbose "Starting the VPN cli"
+  Write-Verbose "Starting the AnyConnect cli"
   $vpncli = New-Object System.Diagnostics.Process
   $vpncli.StartInfo = New-Object System.Diagnostics.ProcessStartInfo(Join-Path $AnyConnectPath 'vpncli.exe')
-  $vpncli.StartInfo.Arguments = "exit"
+  $vpncli.StartInfo.Arguments = "state"
   $vpncli.StartInfo.CreateNoWindow  = $false
   $vpncli.StartInfo.UseShellExecute = $false
   $vpncli.StartInfo.RedirectStandardOutput = $true
