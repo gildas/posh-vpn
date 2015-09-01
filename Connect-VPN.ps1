@@ -113,10 +113,10 @@ function Connect-VPN # {{{
   Param(
     [Parameter(Position=1, Mandatory=$true)]
     [ValidateSet('AnyConnect')]
-    [Parameter(Position=2, Mandatory=$true)]
-    [Alias("Server")]
-    [string] $ComputerName,
     [string] $Provider,
+    #[Parameter(Position=2, Mandatory=$true)]
+    #[Alias("Server")]
+    #[string] $ComputerName,
     [Parameter(Position=3, ParameterSetName='Credential', Mandatory=$true)]
     [System.Management.Automation.PSCredential] $Credential,
     [Parameter(Position=3, ParameterSetName='Plain', Mandatory=$true)]
@@ -125,13 +125,39 @@ function Connect-VPN # {{{
     [Parameter(Position=4, ParameterSetName='Plain', Mandatory=$true)]
     [string] $Password
   )
-  $PSBoundParameters.Remove('Type') | Out-Null
-  switch($Type)
+  DynamicParam
+  {
+    $parameters = New-Object -Type System.Management.Automation.RuntimeDefinedParameterDictionary
+
+    #[Parameter(Position=2, Mandatory=$true)]
+    $attributes = New-Object -Type System.Collections.ObjectModel.Collection[System.Attribute]
+    $parameter_attribute = New-Object -Type System.Management.Automation.ParameterAttribute
+    $parameter_attribute.Position  = 2
+    $parameter_attribute.Mandatory = $true
+    #$parameter_attribute.ParameterSetName = @('Credential', 'Plain')
+    $attributes.Add($parameter_attribute)
+    if ($Provider -eq 'AnyConnect')
+    {
+      #[ValidateSet(Get-VPNProfiles -Type AnyConnect)]
+      $validateset = New-Object -Type System.Management.Automation.ValidateSetAttribute(Get-VPNProfile -Type AnyConnect)
+      $attributes.Add($validateset)
+    }
+    #[Alias("Server")]
+    $aliases = New-Object -Type  System.Management.Automation.AliasAttribute(@('Server'))
+    $attributes.Add($aliases)
+    #[string] $ComputerName,
+    $parameter = New-Object -Type System.Management.Automation.RuntimeDefinedParameter("ComputerName", [string], $attributes)
+    $parameters.Add('ComputerName', $parameter)
+
+    return $parameters
+  }
+  process
   {
     $PSBoundParameters.Remove('Provider') | Out-Null
     switch($Provider)
     {
       'AnyConnect' { Connect-AnyConnect @PSBoundParameters }
       default      { Throw "Unsupported VPN Type: $Provider" }
+    }
   }
 } # }}}
