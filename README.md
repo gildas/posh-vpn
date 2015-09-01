@@ -6,7 +6,7 @@ Installation
 
 If you have [http://psget.net](PsGet) installed just run:
 ```posh
-Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/zipball/master
+Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/archive/master.zip
 ```
 
 Copy the following line and paste it in a Powershell:
