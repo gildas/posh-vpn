@@ -4,7 +4,7 @@ Powershell Module to use various VPN Providers.
 Installation
 ------------
 
-If you have [http://psget.net](PsGet) installed just run:
+If you have [PsGet](http://psget.net) installed just run:
 ```posh
 Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/archive/master.zip
 ```
