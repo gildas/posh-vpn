@@ -1,20 +1,29 @@
 function Connect-AnyConnect() # {{{
 {
-  [CmdletBinding()]
+  [CmdletBinding(DefaultParameterSetName='Credential')]
   Param(
     [Parameter(Position=1, Mandatory=$true)]
     [Alias("Server")]
     [string] $ComputerName,
-    [Parameter(Position=2, Mandatory=$true)]
+    [Parameter(Position=2, ParameterSetName='Credential', Mandatory=$true)]
+    [System.Management.Automation.PSCredential] $Credential,
+    [Parameter(Position=2, ParameterSetName='Plain', Mandatory=$true)]
     [Alias("Username")]
     [string] $User,
-    [Parameter(Position=3, Mandatory=$true)]
+    [Parameter(Position=3, ParameterSetName='Plain', Mandatory=$true)]
     [string] $Password
   )
   # Disconnect as needed
   if ((Get-AnyConnectStatus -Verbose:$Verbose) -ne 'Disconnected')
   {
     Disconnect-AnyConnect -Verbose:$Verbose
+  }
+
+  if ($PSCmdlet.ParameterSetName -eq 'Credential')
+  {
+    Write-Verbose "Loading PSCredentials"
+    $User     = $Credential.UserName
+    $Password = $Credential.GetNetworkCredential().password
   }
 
   # First Stop any VPN cli and ui
@@ -31,6 +40,7 @@ function Connect-AnyConnect() # {{{
     }
   }
 
+  Write-Debug "Starting AnyConnect to $ComputerName as $User (Password: $Password)"
   Write-Verbose "Starting the AnyConnect cli"
   $vpncli = New-Object System.Diagnostics.Process
   $vpncli.StartInfo = New-Object System.Diagnostics.ProcessStartInfo(Get-AnyConnect)
@@ -82,18 +92,20 @@ function Connect-AnyConnect() # {{{
 
 function Connect-VPN() # {{{
 {
-  [CmdletBinding()]
+  [CmdletBinding(DefaultParameterSetName='Credential')]
   Param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Position=1, Mandatory=$true)]
     [ValidateSet('AnyConnect')]
     [string] $Type,
-    [Parameter(Position=1, Mandatory=$true)]
+    [Parameter(Position=2, Mandatory=$true)]
     [Alias("Server")]
     [string] $ComputerName,
-    [Parameter(Position=2, Mandatory=$true)]
+    [Parameter(Position=3, ParameterSetName='Credential', Mandatory=$true)]
+    [System.Management.Automation.PSCredential] $Credential,
+    [Parameter(Position=3, ParameterSetName='Plain', Mandatory=$true)]
     [Alias("Username")]
     [string] $User,
-    [Parameter(Position=3, Mandatory=$true)]
+    [Parameter(Position=4, ParameterSetName='Plain', Mandatory=$true)]
     [string] $Password
   )
   $PSBoundParameters.Remove('Type') | Out-Null
