@@ -2,7 +2,7 @@ function Disconnect-AnyConnect() # {{{
 {
   [CmdletBinding()]
   Param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$false)]
     [PSCustomObject] $VPNSession
   )
   Write-Verbose "Starting the VPN cli"
@@ -72,7 +72,7 @@ function Disconnect-AnyConnect() # {{{
 #>
 function Disconnect-VPN() # {{{
 {
-  [CmdletBinding()]
+  [CmdletBinding(DefaultParameterSetName='Session')]
   Param(
     [Parameter(Position=1, ParameterSetName='Session', Mandatory=$true)]
     [PSCustomObject] $VPNSession,
