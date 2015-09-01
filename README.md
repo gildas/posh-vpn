@@ -4,9 +4,9 @@ Powershell Module to use various VPN Providers.
 Installation
 ------------
 
-If you have PsGet installed just run:
+If you have [http://psget.net](PsGet) installed just run:
 ```posh
-Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/xxxx
+Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/zipball/master
 ```
 
 Copy the following line and paste it in a Powershell:
@@ -37,26 +37,26 @@ Usage
 
 To connect to a VPN:
 ```posh
-PS> $vpn_session = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -User gildas -Password 's3cr3t'
+PS> $vpn = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -User gildas -Password 's3cr3t'
 ```
 
 It is also possible to use a PSCredential object:
 ```posh
 PS> $creds = Get-Credential ACME\gildas
-PS> $vpn_session = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -Credential $creds
+PS> $vpn = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -Credential $creds
 ```
 
 In both cases, you can use the TAB completion for the ComputerName. The values come from the available profiles/servers/connections for the given provider.
 
 To get the status of a VPN session:
 ```posh
-PS> Get-VPNStatus $vpn_session
+PS> Get-VPNStatus $vpn
 Connected
 ```
 
 To disconnect a VPN session:
 ```posh
-PS> Disconnect-VPN $vpn_session
+PS> Disconnect-VPN $vpn
 ```
 
 To get the list of the available profiles/severs/connections for a given provider:
