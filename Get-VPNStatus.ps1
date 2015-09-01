@@ -38,6 +38,48 @@ function Get-AnyConnectStatus() # {{{
   return $status
 } #}}}
 
+<#
+.SYNOPSIS
+  Gets the current status of a VPN Session or a Provider.
+
+.DESCRIPTION
+  Gets the current status of a VPN Session or a Provider.
+
+.NOTES
+  Only Cisco AnyConnect VPNs are supported as of now.
+
+.PARAMETER Provider
+  The VPN Provider to use.
+  One of: AnyConnect
+
+.PARAMETER VPNSession
+  The VPN session object returned by Connect-VPN.
+
+.OUTPUTS
+  The current status of the VPN Session of the Provider.
+  With AnyConnect, the values are typically: Connected, Disconnected, Unknown.
+
+.LINK
+  https://github.com/gildas/posh-vpn
+
+.EXAMPLE
+  $session = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -Credentials (Get-Credential ACME\gildas)
+
+  Get-VPNStatus $session
+  Connected
+
+  Description
+  -----------
+  Gets the connection of a session
+
+.EXAMPLE
+  Get-VPNStatus -Provider AnyConnect
+  Disconnected
+
+  Description
+  -----------
+  Gets the status of Cisco AnyConnect VPN
+#>
 function Get-VPNStatus() # {{{
 {
   [CmdletBinding(DefaultParameterSetName='Session')]

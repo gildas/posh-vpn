@@ -34,6 +34,42 @@ function Disconnect-AnyConnect() # {{{
   }
 } #}}}
 
+<#
+.SYNOPSIS
+  Disconnect from a VPN Session or Provider.
+
+.DESCRIPTION
+  Disconnect this computer from a given VPN Session or Provider.
+
+.NOTES
+  Only Cisco AnyConnect VPNs are supported as of now.
+
+.PARAMETER Provider
+  The VPN Provider to use.
+  One of: AnyConnect
+
+.PARAMETER VPNSession
+  The VPN session object returned by Connect-VPN.
+
+.LINK
+  https://github.com/gildas/posh-vpn
+
+.EXAMPLE
+  $session = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -Credentials (Get-Credential ACME\gildas)
+
+  Disconnect-VPN $session
+
+  Description
+  -----------
+  Disconnects from a Cisco AnyConnect VPN session
+
+.EXAMPLE
+  Disconnect-VPN -Provider AnyConnect
+
+  Description
+  -----------
+  Disconnects from any Cisco AnyConnect VPN
+#>
 function Disconnect-VPN() # {{{
 {
   [CmdletBinding()]

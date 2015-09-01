@@ -40,6 +40,34 @@ function Get-AnyConnectProfile() # {{{
   return $profiles
 } #}}}
 
+<#
+.SYNOPSIS
+  Displays all profiles/Computers that can be used with a given Provider
+
+.DESCRIPTION
+  Displays all profiles/Computers that can be used with a given Provider
+
+.NOTES
+  Only Cisco AnyConnect VPNs are supported as of now.
+
+.PARAMETER Provider
+  The VPN Provider to use.
+  One of: AnyConnect
+
+.OUTPUTS
+  The list of profiles, servers that can be connected to from the local computer.
+
+.LINK
+  https://github.com/gildas/posh-vpn
+
+.EXAMPLE
+  $session = Get-VPNProfile -Provider AnyConnect
+  vpn.acme.com
+
+  Description
+  -----------
+  Gives the list of servers the user can connect to
+#>
 function Get-VPNProfile() # {{{
 {
   [CmdletBinding()]

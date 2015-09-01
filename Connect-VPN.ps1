@@ -107,6 +107,56 @@ function Connect-AnyConnect() # {{{
   }
 } #}}}
 
+<#
+.SYNOPSIS
+  Connects to a VPN Provider.
+
+.DESCRIPTION
+  Connects this computer to a given VPN Provider.
+
+.NOTES
+  Only Cisco AnyConnect VPNs are supported as of now.
+
+.PARAMETER Provider
+  The VPN Provider to use.
+  One of: AnyConnect
+
+.PARAMETER ComputerName
+  The ComputerName or VPN profile to use.
+  The TAB completion will provide the list of possible values depending on the chosen Provider.
+
+.PARAMETER Credential
+  The PSCredential to use.
+
+.PARAMETER User
+  If no PSCredential is provided, a User and a (plain text) Password must be provided.
+
+.PARAMETER Password
+  If no PSCredential is provided, a User and a (plain text) Password must be provided.
+
+.INPUTS
+  The ComputerName can be piped in.
+
+.OUTPUTS
+  A PSCustomObject that represents the VPN connection (its Provider, the ComputerName, and the Credential).
+
+.LINK
+  https://github.com/gildas/posh-vpn
+
+.EXAMPLE
+  $session = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -Credentials (Get-Credential ACME\gildas)
+
+  Description
+  -----------
+  Connects to a Cisco AnyConnect VPN at vpn.acme.com with the PSCredential entered via Get-Credential
+
+.EXAMPLE
+  $session = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -User ACME\gildas -Password s3cr3t
+
+  Description
+  -----------
+  Connects to a Cisco AnyConnect VPN at vpn.acme.com with the clear text user and password
+#>
 function Connect-VPN # {{{
 {
   [CmdletBinding(DefaultParameterSetName='Credential')]
@@ -134,6 +184,7 @@ function Connect-VPN # {{{
     $parameter_attribute = New-Object -Type System.Management.Automation.ParameterAttribute
     $parameter_attribute.Position  = 2
     $parameter_attribute.Mandatory = $true
+    $parameter_attribute.ValueFromPipeline = $true
     #$parameter_attribute.ParameterSetName = @('Credential', 'Plain')
     $attributes.Add($parameter_attribute)
     if ($Provider -eq 'AnyConnect')
