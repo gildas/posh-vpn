@@ -6,14 +6,26 @@ Installation
 
 If you have [PsGet](http://psget.net) installed just run:
 ```posh
-Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/archive/master.zip
+Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/releases/download/0.1.0/posh-vpn-0.1.0.zip
 ```
 
 Copy the following line and paste it in a Powershell:
 
 ```posh
-Start-BitsTransfer https://raw.githubusercontent.com/gildas/master/Install.ps1 $env:TEMP ; & $env:TEMP\Install.ps1
+Start-BitsTransfer http://bit.ly/posh-vpn-0_1_0 $env:TEMP ; & $env:TEMP\Install.ps1
 ```
+
+To install the latest development version, use one of the followings:
+
+```posh
+Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/archive/master.zip
+```
+
+```posh
+Start-BitsTransfer http://bit.ly/posh-vpn-master $env:TEMP ; & $env:TEMP\Install.ps1
+```
+
+
 
 The following options are accepted:
 - -Path  
