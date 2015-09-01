@@ -81,3 +81,27 @@ function Connect-AnyConnect() # {{{
   }
   Start-Process -FilePath (Join-Path $AnyConnectPath 'vpnui.exe')
 } #}}}
+
+function Connect-VPN() # {{{
+{
+  [CmdletBinding()]
+  Param(
+    [Parameter(Mandatory=$true)]
+    [ValidateSet('AnyConnect')]
+    [string] $Type,
+    [Parameter(Position=1, Mandatory=$true)]
+    [Alias("Server")]
+    [string] $ComputerName,
+    [Parameter(Position=2, Mandatory=$true)]
+    [Alias("Username")]
+    [string] $User,
+    [Parameter(Position=3, Mandatory=$true)]
+    [string] $Password
+  )
+  $PSBoundParameters.Remove('Type')
+  switch($Type)
+  {
+    'AnyConnect' { Connect-AnyConnect @PSBoundParameters }
+    default      { Throw "Unsupported VPN Type: $Type" }
+  }
+} # }}}

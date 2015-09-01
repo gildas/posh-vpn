@@ -37,3 +37,18 @@ function Get-AnyConnectStatus() # {{{
   }
   return $status
 } #}}}
+
+function Get-VPNStatus() # {{{
+{
+  [CmdletBinding()]
+  Param(
+    [Parameter(Mandatory=$true)]
+    [ValidateSet('AnyConnect')]
+    [string] $Type
+  )
+  switch($Type)
+  {
+    'AnyConnect' { Get-AnyConnectStatus -Verbose:$Verbose }
+    default      { Throw "Unsupported VPN Type: $Type" }
+  }
+} # }}}

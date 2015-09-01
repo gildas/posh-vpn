@@ -33,3 +33,18 @@ function Disconnect-AnyConnect() # {{{
       Write-Warning $output
   }
 } #}}}
+
+function Disconnect-VPN() # {{{
+{
+  [CmdletBinding()]
+  Param(
+    [Parameter(Mandatory=$true)]
+    [ValidateSet('AnyConnect')]
+    [string] $Type
+  )
+  switch($Type)
+  {
+    'AnyConnect' { Disconnect-AnyConnect -Verbose:$Verbose }
+    default      { Throw "Unsupported VPN Type: $Type" }
+  }
+} # }}}
