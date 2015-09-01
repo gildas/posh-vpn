@@ -2,6 +2,8 @@ function Disconnect-AnyConnect() # {{{
 {
   [CmdletBinding()]
   Param(
+    [Parameter(Mandatory=$true)]
+    [PSCustomObject] $VPNSession
   )
   Write-Verbose "Starting the VPN cli"
   $vpncli = New-Object System.Diagnostics.Process
@@ -37,13 +39,12 @@ function Disconnect-VPN() # {{{
   [CmdletBinding()]
   Param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet('AnyConnect')]
-    [string] $Type
+    [PSCustomObject] $VPNSession
   )
-  $PSBoundParameters.Remove('Type') | Out-Null
-  switch($Type)
+  switch($VPNSession.Type)
   {
     'AnyConnect' { Disconnect-AnyConnect @PSBoundParameters }
-    default      { Throw "Unsupported VPN Type: $Type" }
+    $null        { Throw [System.ArgumentException] "VPNSession misses a Type"; } 
+    default      { Throw "Unsupported VPN Type: $VPNSession.Type" }
   }
 } # }}}

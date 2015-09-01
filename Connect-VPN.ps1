@@ -13,17 +13,28 @@ function Connect-AnyConnect() # {{{
     [Parameter(Position=3, ParameterSetName='Plain', Mandatory=$true)]
     [string] $Password
   )
-  # Disconnect as needed
-  if ((Get-AnyConnectStatus -Verbose:$Verbose) -ne 'Disconnected')
-  {
-    Disconnect-AnyConnect -Verbose:$Verbose
-  }
-
   if ($PSCmdlet.ParameterSetName -eq 'Credential')
   {
     Write-Verbose "Loading PSCredentials"
     $User     = $Credential.UserName
     $Password = $Credential.GetNetworkCredential().password
+  }
+  else
+  {
+    $secret     = ConvertTo-SecureString $Password -AsPlainText -Force
+    $Credential = New-Object System.Management.Automation.PSCredential($User, $secret)
+    $secret     = $null
+  }
+
+  # Disconnect as needed
+  $temp_session = [PSCustomObject] @{
+    Type='AnyConnect';
+    ComputerName=$ComputerName;
+    Credential=$Credential;
+  }
+  if ((Get-AnyConnectStatus -VPNSession $temp_session -Verbose:$false) -ne 'Disconnected')
+  {
+    Disconnect-AnyConnect -VPNSession $temp_session -Verbose:$Verbose
   }
 
   # First Stop any VPN cli and ui
@@ -88,6 +99,12 @@ function Connect-AnyConnect() # {{{
     }
   }
   Start-Process -FilePath (Get-Anyconnect -gui)
+
+  return [PSCustomObject] @{
+    Type='AnyConnect';
+    ComputerName=$ComputerName;
+    Credential=$Credential;
+  }
 } #}}}
 
 function Connect-VPN() # {{{
