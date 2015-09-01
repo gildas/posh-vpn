@@ -4,6 +4,10 @@ Param(
   $Path
 )
 
+$ModuleName    = 'Posh-VPN'
+$ModuleVersion = 'master'
+$GithubRoot    = "https://raw.githubusercontent.com/gildas/posh-vpn/$ModuleVersion"
+
 if ([string]::IsNullOrEmpty($Path))
 {
   $my_modules   = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'WindowsPowerShell\Modules'
@@ -21,12 +25,12 @@ if ([string]::IsNullOrEmpty($Path))
     $env:PSModulePath = $my_modules + ';' + $env:PSModulePath
     [Environment]::SetEnvironmentVariable('PSModulePath', $env:PSModulePath, 'User')
   }
-  $Path = Join-Path $my_modules 'Posh-VPN'
+  $Path = Join-Path $my_modules $ModuleName
 }
 
 if (! (Test-Path $Path))
 {
-  Write-Verbose "Creating Posh-VPN Module folder"
+  Write-Verbose "Creating $ModuleName Module folder"
   New-Item -ItemType Directory -Path $Path -ErrorAction Stop | Out-Null
 }
 
@@ -41,5 +45,5 @@ if (! (Test-Path $Path))
   'Posh-VPN.psd1',
   'Posh-VPN.psm1'
 ) | ForEach-Object {
-  Start-BitsTransfer -DisplayName "Posh-VPN Installation" -Description "Installing $_" -Source "https://raw.githubusercontent.com/gildas/posh-vpn/master/$_" -Destination $Path -ErrorAction Stop
+  Start-BitsTransfer -DisplayName "$ModuleName Installation" -Description "Installing $_" -Source "$GithubRoot/$_" -Destination $Path -ErrorAction Stop
 }
