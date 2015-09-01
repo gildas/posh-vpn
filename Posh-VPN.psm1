@@ -7,6 +7,7 @@ if ($PSVersionTable.PSVersion.Major -lt 3)
 }
 
 Push-Location $PSScriptRoot
+. .\Get-AnyConnect.ps1
 . .\Get-VPNStatus.ps1
 . .\Disconnect-VPN.ps1
 . .\Connect-VPN.ps1

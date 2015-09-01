@@ -3,11 +3,9 @@ function Disconnect-AnyConnect() # {{{
   [CmdletBinding()]
   Param(
   )
-  $AnyConnectPath = Join-Path ${env:ProgramFiles(x86)} (Join-Path 'Cisco' 'Cisco AnyConnect Secure Mobility Client')
-
   Write-Verbose "Starting the VPN cli"
   $vpncli = New-Object System.Diagnostics.Process
-  $vpncli.StartInfo = New-Object System.Diagnostics.ProcessStartInfo(Join-Path $AnyConnectPath 'vpncli.exe')
+  $vpncli.StartInfo = New-Object System.Diagnostics.ProcessStartInfo(Get-AnyConnect)
   $vpncli.StartInfo.Arguments = "disconnect"
   $vpncli.StartInfo.CreateNoWindow  = $false
   $vpncli.StartInfo.UseShellExecute = $false

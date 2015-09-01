@@ -11,8 +11,6 @@ function Connect-AnyConnect() # {{{
     [Parameter(Position=3, Mandatory=$true)]
     [string] $Password
   )
-  $AnyConnectPath = Join-Path ${env:ProgramFiles(x86)} (Join-Path 'Cisco' 'Cisco AnyConnect Secure Mobility Client')
-
   # Disconnect as needed
   if ((Get-AnyConnectStatus -Verbose:$Verbose) -ne 'Disconnected')
   {
@@ -35,7 +33,7 @@ function Connect-AnyConnect() # {{{
 
   Write-Verbose "Starting the AnyConnect cli"
   $vpncli = New-Object System.Diagnostics.Process
-  $vpncli.StartInfo = New-Object System.Diagnostics.ProcessStartInfo(Join-Path $AnyConnectPath 'vpncli.exe')
+  $vpncli.StartInfo = New-Object System.Diagnostics.ProcessStartInfo(Get-AnyConnect)
   $vpncli.StartInfo.Arguments = "-s"
   $vpncli.StartInfo.CreateNoWindow  = $true
   $vpncli.StartInfo.UseShellExecute = $false
@@ -79,7 +77,7 @@ function Connect-AnyConnect() # {{{
       }
     }
   }
-  Start-Process -FilePath (Join-Path $AnyConnectPath 'vpnui.exe')
+  Start-Process -FilePath (Get-Anyconnect -gui)
 } #}}}
 
 function Connect-VPN() # {{{
