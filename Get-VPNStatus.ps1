@@ -45,10 +45,10 @@ function Get-VPNStatus() # {{{
     [Parameter(Mandatory=$true)]
     [PSCustomObject] $VPNSession
   )
-  switch($VPNSession.Type)
+  switch($VPNSession.Provider)
   {
     'AnyConnect' { Get-AnyConnectStatus @PSBoundParameters }
-    $null        { Throw [System.ArgumentException] "VPNSession misses a Type"; } 
-    default      { Throw "Unsupported VPN Type: $VPNSession.Type" }
+    $null        { Throw [System.ArgumentException] "VPNSession misses a Provider"; } 
+    default      { Throw "Unsupported VPN Type: $VPNSession.Provider" }
   }
 } # }}}

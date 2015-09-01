@@ -41,10 +41,10 @@ function Disconnect-VPN() # {{{
     [Parameter(Mandatory=$true)]
     [PSCustomObject] $VPNSession
   )
-  switch($VPNSession.Type)
+  switch($VPNSession.Provider)
   {
     'AnyConnect' { Disconnect-AnyConnect @PSBoundParameters }
     $null        { Throw [System.ArgumentException] "VPNSession misses a Type"; } 
-    default      { Throw "Unsupported VPN Type: $VPNSession.Type" }
+    default      { Throw "Unsupported VPN Type: $VPNSession.Provider" }
   }
 } # }}}

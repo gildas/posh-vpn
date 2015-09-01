@@ -101,22 +101,22 @@ function Connect-AnyConnect() # {{{
   Start-Process -FilePath (Get-Anyconnect -gui)
 
   return [PSCustomObject] @{
-    Type='AnyConnect';
+    Provider='AnyConnect';
     ComputerName=$ComputerName;
     Credential=$Credential;
   }
 } #}}}
 
-function Connect-VPN() # {{{
+function Connect-VPN # {{{
 {
   [CmdletBinding(DefaultParameterSetName='Credential')]
   Param(
     [Parameter(Position=1, Mandatory=$true)]
     [ValidateSet('AnyConnect')]
-    [string] $Type,
     [Parameter(Position=2, Mandatory=$true)]
     [Alias("Server")]
     [string] $ComputerName,
+    [string] $Provider,
     [Parameter(Position=3, ParameterSetName='Credential', Mandatory=$true)]
     [System.Management.Automation.PSCredential] $Credential,
     [Parameter(Position=3, ParameterSetName='Plain', Mandatory=$true)]
@@ -128,7 +128,10 @@ function Connect-VPN() # {{{
   $PSBoundParameters.Remove('Type') | Out-Null
   switch($Type)
   {
-    'AnyConnect' { Connect-AnyConnect @PSBoundParameters }
-    default      { Throw "Unsupported VPN Type: $Type" }
+    $PSBoundParameters.Remove('Provider') | Out-Null
+    switch($Provider)
+    {
+      'AnyConnect' { Connect-AnyConnect @PSBoundParameters }
+      default      { Throw "Unsupported VPN Type: $Provider" }
   }
 } # }}}
