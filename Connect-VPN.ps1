@@ -96,7 +96,7 @@ function Connect-VPN() # {{{
     [Parameter(Position=3, Mandatory=$true)]
     [string] $Password
   )
-  $PSBoundParameters.Remove('Type')
+  $PSBoundParameters.Remove('Type') | Out-Null
   switch($Type)
   {
     'AnyConnect' { Connect-AnyConnect @PSBoundParameters }

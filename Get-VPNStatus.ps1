@@ -44,9 +44,10 @@ function Get-VPNStatus() # {{{
     [ValidateSet('AnyConnect')]
     [string] $Type
   )
+  $PSBoundParameters.Remove('Type') | Out-Null
   switch($Type)
   {
-    'AnyConnect' { Get-AnyConnectStatus -Verbose:$Verbose }
+    'AnyConnect' { Get-AnyConnectStatus @PSBoundParameters }
     default      { Throw "Unsupported VPN Type: $Type" }
   }
 } # }}}

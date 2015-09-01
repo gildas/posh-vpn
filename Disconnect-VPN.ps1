@@ -40,9 +40,10 @@ function Disconnect-VPN() # {{{
     [ValidateSet('AnyConnect')]
     [string] $Type
   )
+  $PSBoundParameters.Remove('Type') | Out-Null
   switch($Type)
   {
-    'AnyConnect' { Disconnect-AnyConnect -Verbose:$Verbose }
+    'AnyConnect' { Disconnect-AnyConnect @PSBoundParameters }
     default      { Throw "Unsupported VPN Type: $Type" }
   }
 } # }}}
