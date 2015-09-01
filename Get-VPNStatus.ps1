@@ -2,7 +2,7 @@ function Get-AnyConnectStatus() # {{{
 {
   [CmdletBinding()]
   Param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$false)]
     [PSCustomObject] $VPNSession
   )
   Write-Verbose "Starting the AnyConnect cli"
@@ -40,15 +40,33 @@ function Get-AnyConnectStatus() # {{{
 
 function Get-VPNStatus() # {{{
 {
-  [CmdletBinding()]
+  [CmdletBinding(DefaultParameterSetName='Session')]
   Param(
-    [Parameter(Mandatory=$true)]
-    [PSCustomObject] $VPNSession
+    [Parameter(Position=1, ParameterSetName='Session', Mandatory=$true)]
+    [PSCustomObject] $VPNSession,
+    [Parameter(Position=1, ParameterSetName='Provider', Mandatory=$true)]
+    [ValidateSet('AnyConnect')]
+    [string] $Provider
   )
-  switch($VPNSession.Provider)
+  switch($PSCmdlet.ParameterSetName)
   {
-    'AnyConnect' { Get-AnyConnectStatus @PSBoundParameters }
-    $null        { Throw [System.ArgumentException] "VPNSession misses a Provider"; } 
-    default      { Throw "Unsupported VPN Type: $VPNSession.Provider" }
+    'Session'
+    {
+      switch($VPNSession.Provider)
+      {
+        'AnyConnect' { Get-AnyConnectStatus @PSBoundParameters }
+        $null        { Throw [System.ArgumentException] "VPNSession misses a Provider"; } 
+        default      { Throw "Unsupported VPN Type: $VPNSession.Provider" }
+      }
+    }
+    'Provider'
+    {
+      $PSBoundParameters.Remove('Provider') | Out-Null
+      switch($Provider)
+      {
+        'AnyConnect' { Get-AnyConnectStatus @PSBoundParameters }
+        default      { Throw "Unsupported VPN Type: $VPNSession.Provider" }
+      }
+    }
   }
 } # }}}

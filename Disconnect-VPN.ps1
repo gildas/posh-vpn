@@ -38,13 +38,31 @@ function Disconnect-VPN() # {{{
 {
   [CmdletBinding()]
   Param(
-    [Parameter(Mandatory=$true)]
-    [PSCustomObject] $VPNSession
+    [Parameter(Position=1, ParameterSetName='Session', Mandatory=$true)]
+    [PSCustomObject] $VPNSession,
+    [Parameter(Position=1, ParameterSetName='Provider', Mandatory=$true)]
+    [ValidateSet('AnyConnect')]
+    [string] $Provider
   )
-  switch($VPNSession.Provider)
+  switch($PSCmdlet.ParameterSetName)
   {
-    'AnyConnect' { Disconnect-AnyConnect @PSBoundParameters }
-    $null        { Throw [System.ArgumentException] "VPNSession misses a Type"; } 
-    default      { Throw "Unsupported VPN Type: $VPNSession.Provider" }
+    'Session'
+    {
+      switch($VPNSession.Provider)
+      {
+        'AnyConnect' { Disconnect-AnyConnect @PSBoundParameters }
+        $null        { Throw [System.ArgumentException] "VPNSession misses a Provider"; } 
+        default      { Throw "Unsupported VPN Type: $VPNSession.Provider" }
+      }
+    }
+    'Provider'
+    {
+      $PSBoundParameters.Remove('Provider') | Out-Null
+      switch($Provider)
+      {
+        'AnyConnect' { Disconnect-AnyConnect @PSBoundParameters }
+        default      { Throw "Unsupported VPN Type: $VPNSession.Provider" }
+      }
+    }
   }
 } # }}}
