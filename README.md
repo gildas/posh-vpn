@@ -6,7 +6,7 @@ Installation
 
 If you have [PsGet](http://psget.net) installed just run:
 ```posh
-Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/releases/download/0.1.0/posh-vpn-0.1.0.zip
+Install-Module Posh-VPN
 ```
 
 Copy the following line and paste it in a Powershell:
