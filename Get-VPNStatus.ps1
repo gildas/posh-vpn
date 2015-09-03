@@ -1,6 +1,7 @@
 function Get-AnyConnectStatus() # {{{
 {
   [CmdletBinding()]
+  [OutputType([string])]
   Param(
     [Parameter(Mandatory=$false)]
     [PSCustomObject] $VPNSession
@@ -56,6 +57,7 @@ function Get-AnyConnectStatus() # {{{
   The VPN session object returned by Connect-VPN.
 
 .OUTPUTS
+  System.String
   The current status of the VPN Session of the Provider.
   With AnyConnect, the values are typically: Connected, Disconnected, Unknown.
 
@@ -83,6 +85,7 @@ function Get-AnyConnectStatus() # {{{
 function Get-VPNStatus() # {{{
 {
   [CmdletBinding(DefaultParameterSetName='Session')]
+  [OutputType([string])]
   Param(
     [Parameter(Position=1, ParameterSetName='Session', Mandatory=$true)]
     [PSCustomObject] $VPNSession,

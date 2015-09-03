@@ -1,6 +1,7 @@
 function Connect-AnyConnect() # {{{
 {
   [CmdletBinding(DefaultParameterSetName='Credential')]
+  [OutputType([PSCustomObject])]
   Param(
     [Parameter(Position=1, Mandatory=$true)]
     [Alias("Server")]
@@ -138,7 +139,8 @@ function Connect-AnyConnect() # {{{
   The ComputerName can be piped in.
 
 .OUTPUTS
-  A PSCustomObject that represents the VPN connection (its Provider, the ComputerName, and the Credential).
+  System.Management.Automation.PSObject
+  Represents the VPN connection (its Provider, the ComputerName, and the Credential).
 
 .LINK
   https://github.com/gildas/posh-vpn
@@ -160,6 +162,7 @@ function Connect-AnyConnect() # {{{
 function Connect-VPN # {{{
 {
   [CmdletBinding(DefaultParameterSetName='Credential')]
+  [OutputType([PSCustomObject])]
   Param(
     [Parameter(Position=1, Mandatory=$true)]
     [ValidateSet('AnyConnect')]

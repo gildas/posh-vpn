@@ -1,6 +1,7 @@
 function Get-AnyConnectProfile() # {{{
 {
   [CmdletBinding()]
+  [OutputType([string[]])]
   Param(
   )
   Write-Verbose "Starting the AnyConnect cli"
@@ -55,6 +56,7 @@ function Get-AnyConnectProfile() # {{{
   One of: AnyConnect
 
 .OUTPUTS
+  System.String[]
   The list of profiles, servers that can be connected to from the local computer.
 
 .LINK
@@ -71,6 +73,7 @@ function Get-AnyConnectProfile() # {{{
 function Get-VPNProfile() # {{{
 {
   [CmdletBinding()]
+  [OutputType([string[]])]
   Param(
     [Parameter(Position=1, Mandatory=$true)]
     [ValidateSet('AnyConnect')]
