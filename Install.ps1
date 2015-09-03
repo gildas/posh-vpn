@@ -41,6 +41,7 @@ if (! (Test-Path $Path))
   'Disconnect-VPN.ps1',
   'Connect-VPN.ps1',
   'LICENSE',
+  'VERSION',
   'README.md',
   'Posh-VPN.psd1',
   'Posh-VPN.psm1'
