@@ -12,17 +12,17 @@ Install-Module Posh-VPN
 Copy the following line and paste it in a Powershell:
 
 ```posh
-Start-BitsTransfer http://tinyurl.com/posh-vpn-0-1-0 $env:TEMP ; & $env:TEMP\Install.ps1
+Start-BitsTransfer http://tinyurl.com/posh-vpn-0-1-1 $env:TEMP ; & $env:TEMP\Install.ps1
 ```
 
 To install the latest development version, use one of the followings:
 
 ```posh
-Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/archive/master.zip
+Install-Module -ModuleUrl https://github.com/gildas/posh-vpn/archive/dev.zip
 ```
 
 ```posh
-Start-BitsTransfer http://tinyurl.com/posh-vpn-master $env:TEMP ; & $env:TEMP\Install.ps1
+Start-BitsTransfer http://tinyurl.com/posh-vpn-dev $env:TEMP ; & $env:TEMP\Install.ps1
 ```
 
 
