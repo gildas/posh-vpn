@@ -74,12 +74,12 @@ function Get-VPNProfile() # {{{
   Param(
     [Parameter(Position=1, Mandatory=$true)]
     [ValidateSet('AnyConnect')]
-    [string] $Type
+    [string] $Provider
   )
-  $PSBoundParameters.Remove('Type') | Out-Null
-  switch($Type)
+  $PSBoundParameters.Remove('Provider') | Out-Null
+  switch($Provider)
   {
     'AnyConnect' { Get-AnyConnectProfile @PSBoundParameters }
-    default      { Throw "Unsupported VPN Type: $Type" }
+    default      { Throw "Unsupported VPN Type: $Provider" }
   }
 } # }}}
