@@ -85,7 +85,11 @@ function Connect-AnyConnect() # {{{
   for ($output = $vpncli.StandardOutput.ReadLine(); $output -ne $null; $output = $vpncli.StandardOutput.ReadLine())
   {
     Write-Debug $output
-    if ($output -match '  >> note: (.*)')
+    if ($output -eq '  >> Login failed.')
+    {
+      Throw [System.Security.Authentication.InvalidCredentialException]
+    }
+    elseif ($output -match '  >> note: (.*)')
     {
       Write-Warning $matches[1]
     }
