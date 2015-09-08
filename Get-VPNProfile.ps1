@@ -83,6 +83,6 @@ function Get-VPNProfile() # {{{
   switch($Provider)
   {
     'AnyConnect' { Get-AnyConnectProfile @PSBoundParameters }
-    default      { Throw "Unsupported VPN Type: $Provider" }
+    default      { Throw "Unsupported VPN Provider: $Provider" }
   }
 } # }}}
