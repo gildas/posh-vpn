@@ -88,7 +88,7 @@ function Disconnect-VPN() # {{{
       {
         'AnyConnect' { Disconnect-AnyConnect @PSBoundParameters }
         $null        { Throw [System.ArgumentException] "VPNSession misses a Provider"; } 
-        default      { Throw "Unsupported VPN Type: $VPNSession.Provider" }
+        default      { Throw "Unsupported VPN Provider: $VPNSession.Provider" }
       }
     }
     'Provider'
@@ -97,7 +97,7 @@ function Disconnect-VPN() # {{{
       switch($Provider)
       {
         'AnyConnect' { Disconnect-AnyConnect @PSBoundParameters }
-        default      { Throw "Unsupported VPN Type: $VPNSession.Provider" }
+        default      { Throw "Unsupported VPN Provider: $VPNSession.Provider" }
       }
     }
   }

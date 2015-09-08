@@ -29,7 +29,7 @@ function Connect-AnyConnect() # {{{
 
   # Disconnect as needed
   $temp_session = [PSCustomObject] @{
-    Type='AnyConnect';
+    Provider='AnyConnect';
     ComputerName=$ComputerName;
     Credential=$Credential;
   }
@@ -196,8 +196,8 @@ function Connect-VPN # {{{
     $attributes.Add($parameter_attribute)
     if ($Provider -eq 'AnyConnect')
     {
-      #[ValidateSet(Get-VPNProfiles -Type AnyConnect)]
-      $validateset = New-Object -Type System.Management.Automation.ValidateSetAttribute(Get-VPNProfile -Type AnyConnect)
+      #[ValidateSet(Get-VPNProfiles -Provider AnyConnect)]
+      $validateset = New-Object -Type System.Management.Automation.ValidateSetAttribute(Get-VPNProfile -Provider AnyConnect)
       $attributes.Add($validateset)
     }
     #[Alias("Server")]
@@ -215,7 +215,7 @@ function Connect-VPN # {{{
     switch($Provider)
     {
       'AnyConnect' { Connect-AnyConnect @PSBoundParameters }
-      default      { Throw "Unsupported VPN Type: $Provider" }
+      default      { Throw "Unsupported VPN Provider: $Provider" }
     }
   }
 } # }}}
