@@ -199,7 +199,8 @@ function Connect-VPN # {{{
       #[ValidateSet(Get-VPNProfiles -Provider AnyConnect)]
       $vpnProfiles = Get-VPNProfile -Provider AnyConnect
 
-      if($vpnProfiles -gt 0){
+      if($vpnProfiles -gt 0)
+      {
           $validateset = New-Object -Type System.Management.Automation.ValidateSetAttribute($vpnProfiles)
           $attributes.Add($validateset)
       }
