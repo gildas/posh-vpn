@@ -197,8 +197,12 @@ function Connect-VPN # {{{
     if ($Provider -eq 'AnyConnect')
     {
       #[ValidateSet(Get-VPNProfiles -Provider AnyConnect)]
-      $validateset = New-Object -Type System.Management.Automation.ValidateSetAttribute(Get-VPNProfile -Provider AnyConnect)
-      $attributes.Add($validateset)
+      $vpnProfiles = Get-VPNProfile -Provider AnyConnect
+
+      if($vpnProfiles -gt 0){
+          $validateset = New-Object -Type System.Management.Automation.ValidateSetAttribute($vpnProfiles)
+          $attributes.Add($validateset)
+      }
     }
     #[Alias("Server")]
     $aliases = New-Object -Type  System.Management.Automation.AliasAttribute(@('Server'))
