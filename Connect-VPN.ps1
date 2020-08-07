@@ -12,7 +12,9 @@ function Connect-AnyConnect() # {{{
     [Alias("Username")]
     [string] $User,
     [Parameter(Position=3, ParameterSetName='Plain', Mandatory=$true)]
-    [string] $Password
+    [string] $Password,
+    [Parameter(Position=4, Mandatory=$false)]
+    [switch] $AcceptNotice    
   )
   if ($PSCmdlet.ParameterSetName -eq 'Credential')
   {
@@ -72,13 +74,19 @@ function Connect-AnyConnect() # {{{
   Start-Sleep 2
 
   Write-Verbose "Sending connect"
-  $vpncli.StandardInput.WriteLine('connect ' + $ComputerName)
+  $vpncli.StandardInput.WriteLine('connect ' + """$ComputerName""")
 
   Write-Verbose "Sending user"
   $vpncli.StandardInput.WriteLine($User)
 
   Write-Verbose "Sending password"
   $vpncli.StandardInput.WriteLine($Password)
+
+  If ( $AcceptNotice )
+  {
+    Write-Verbose "Accepting notice"
+    $vpncli.StandardInput.WriteLine("y")
+  }
 
   Write-Verbose "Reading its output stream"
   $found = $false
@@ -139,6 +147,9 @@ function Connect-AnyConnect() # {{{
 .PARAMETER Password
   If no PSCredential is provided, a User and a (plain text) Password must be provided.
 
+.PARAMETER AcceptNotice
+  Accept notice from the server, like a banner message.
+
 .INPUTS
   The ComputerName can be piped in.
 
@@ -180,7 +191,9 @@ function Connect-VPN # {{{
     [Alias("Username")]
     [string] $User,
     [Parameter(Position=4, ParameterSetName='Plain', Mandatory=$true)]
-    [string] $Password
+    [string] $Password,
+    [Parameter(Position=5, Mandatory=$false)]
+    [switch] $AcceptNotice
   )
   DynamicParam
   {

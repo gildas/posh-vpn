@@ -12,7 +12,7 @@ Install-Module Posh-VPN
 Copy the following line and paste it in a Powershell:
 
 ```posh
-Start-BitsTransfer http://tinyurl.com/posh-vpn-0-1-4 $env:TEMP ; & $env:TEMP\Install.ps1
+Start-BitsTransfer http://tinyurl.com/posh-vpn-0-1-5 $env:TEMP ; & $env:TEMP\Install.ps1
 ```
 
 To install the latest development version, use one of the followings:
@@ -33,6 +33,13 @@ The following options are accepted:
   When this parameter is not present, the module will be installed in WindowsPowerShell\Modules\Posh-VPN under the user's documents.  
   In general, you will not need this parameter as the default folder gets automatically added in the list of folders where Powershell searches for modules and loads them.  
   Default: None
+- -Credential  
+  Contains a `PSCredential` to log in the VPN.
+- -User, -Password  
+  Contain the user and the password to log in the VPN.  
+  This is less secure than `-Credential` as you need to use plain text.
+- -AcceptNotice  
+  Accept notice (*banner*) from the VPN server.
 - -Verbose
   Acts verbosely
 - -WhatIf
@@ -80,3 +87,8 @@ vpn.acme.com
 AUTHORS
 =======
 [![endorse](https://api.coderwall.com/gildas/endorsecount.png)](https://coderwall.com/gildas)
+
+CONTRIBUTORS
+============
+- [Charl Meyers](https://github.com/charlmeyers-bee123)
+- [Morgan Simonsen](https://github.com/morgansimonsen)
