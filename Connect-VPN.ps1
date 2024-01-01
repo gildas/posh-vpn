@@ -42,7 +42,7 @@ function Connect-AnyConnect() # {{{
 
   # First Stop any VPN cli and ui
   # There must be only one "client" running when connecting
-  Get-Process | Where ProcessName -match 'vpn(ui|cli)' | ForEach {
+  Get-Process | Where-Object ProcessName -match 'vpn(ui|cli)' | ForEach-Object {
     if (! $_.HasExited)
     {
       Write-Verbose "Stopping process $($_.Name) (pid: $($_.Id))"
@@ -89,8 +89,7 @@ function Connect-AnyConnect() # {{{
   }
 
   Write-Verbose "Reading its output stream"
-  $found = $false
-  for ($output = $vpncli.StandardOutput.ReadLine(); $output -ne $null; $output = $vpncli.StandardOutput.ReadLine())
+  for ($output = $vpncli.StandardOutput.ReadLine(); $null -ne $output; $output = $vpncli.StandardOutput.ReadLine())
   {
     Write-Debug $output
     if ($output -eq '  >> Login failed.')
