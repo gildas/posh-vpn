@@ -14,7 +14,9 @@ function Connect-AnyConnect() # {{{
     [Parameter(Position=3, ParameterSetName='Plain', Mandatory=$true)]
     [string] $Password,
     [Parameter(Position=4, Mandatory=$false)]
-    [switch] $AcceptNotice    
+    [switch] $AcceptNotice,
+    [Parameter(Position=5, Mandatory=$false)]
+    [int] $Timeout = 60
   )
   if ($PSCmdlet.ParameterSetName -eq 'Credential')
   {
@@ -88,8 +90,9 @@ function Connect-AnyConnect() # {{{
     $vpncli.StandardInput.WriteLine("y")
   }
 
+  $timer = [Diagnostics.Stopwatch]::StartNew()
   Write-Verbose "Reading its output stream"
-  for ($output = $vpncli.StandardOutput.ReadLine(); $null -ne $output; $output = $vpncli.StandardOutput.ReadLine())
+  for ($output = $vpncli.StandardOutput.ReadLine(); $null -ne $output -and $timer.Elapsed.TotalSeconds -lt $Timeout; $output = $vpncli.StandardOutput.ReadLine())
   {
     Write-Debug $output
     if ($output -eq '  >> Login failed.')
@@ -109,6 +112,11 @@ function Connect-AnyConnect() # {{{
         break
       }
     }
+  }
+  $timer.Stop()
+  if ($timer.Elapsed.TotalSeconds -ge $Timeout)
+  {
+    Throw [System.TimeoutException] "Timeout ($Timeout seconds) while connecting to $ComputerName"
   }
   Start-Process -FilePath (Get-Anyconnect -gui)
 
@@ -148,6 +156,10 @@ function Connect-AnyConnect() # {{{
 
 .PARAMETER AcceptNotice
   Accept notice from the server, like a banner message.
+
+.PARAMETER Timeout
+  Maximum time in seconds to wait for the connection to be established.
+  Default is 60 seconds.
 
 .INPUTS
   The ComputerName can be piped in.
@@ -192,7 +204,9 @@ function Connect-VPN # {{{
     [Parameter(Position=4, ParameterSetName='Plain', Mandatory=$true)]
     [string] $Password,
     [Parameter(Position=5, Mandatory=$false)]
-    [switch] $AcceptNotice
+    [switch] $AcceptNotice,
+    [Parameter(Position=6, Mandatory=$false)]
+    [int] $Timeout = 60
   )
   DynamicParam
   {
