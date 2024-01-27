@@ -92,19 +92,19 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        # Tags = @('vpn', 'cisco', 'anyconnect')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        # LicenseUri = 'https://raw.githubusercontent.com/gildas/posh-vpn/master/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        # ProjectUri = 'https://github.com/gildas/posh-vpn'
 
         # A URL to an icon representing this module.
         # IconUri = ''
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        # ReleaseNotes = 'https://github.com/gildas/posh-vpn/releases'
 
     } # End of PSData hashtable
 
