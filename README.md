@@ -12,7 +12,7 @@ Install-Module Posh-VPN
 Copy the following line and paste it in a Powershell:
 
 ```posh
-Start-BitsTransfer http://tinyurl.com/posh-vpn-0-1-5 $env:TEMP ; & $env:TEMP\Install.ps1
+Start-BitsTransfer https://raw.githubusercontent.com/gildas/posh-vpn/0.1.6/Install.ps1 $env:TEMP ; & $env:TEMP\Install.ps1
 ```
 
 To install the latest development version, use one of the followings:
@@ -63,6 +63,11 @@ It is also possible to use a PSCredential object:
 ```posh
 PS> $creds = Get-Credential ACME\gildas
 PS> $vpn = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -Credential $creds
+```
+
+You can also specify a custom timeout. Upon reaching the timeout the `Connect-VPN` Cmdlet will display an error:
+```posh
+PS> $vpn = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -Credential $creds -Timeout 60
 ```
 
 In both cases, you can use the TAB completion for the ComputerName. The values come from the available profiles/servers/connections for the given provider.
