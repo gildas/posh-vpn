@@ -5,7 +5,7 @@ Param(
 )
 
 $ModuleName    = 'Posh-VPN'
-$ModuleVersion = '0.1.5'
+$ModuleVersion = '0.1.6'
 $GithubRoot    = "https://raw.githubusercontent.com/gildas/posh-vpn/$ModuleVersion"
 
 if ([string]::IsNullOrEmpty($Path))

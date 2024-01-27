@@ -12,7 +12,7 @@
 RootModule = 'Posh-VPN.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.5'
+ModuleVersion = '0.1.6'
 
 # ID used to uniquely identify this module
 GUID = 'c762b59e-61f1-4411-9c5b-3709a00199c1'
