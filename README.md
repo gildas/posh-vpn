@@ -65,6 +65,11 @@ PS> $creds = Get-Credential ACME\gildas
 PS> $vpn = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -Credential $creds
 ```
 
+You can also specify a custom timeout. Upon reaching the timeout the `Connect-VPN` Cmdlet will display an error:
+```posh
+PS> $vpn = Connect-VPN -Provider AnyConnect -ComputerName vpn.acme.com -Credential $creds -Timeout 60
+```
+
 In both cases, you can use the TAB completion for the ComputerName. The values come from the available profiles/servers/connections for the given provider.
 
 To get the status of a VPN session:

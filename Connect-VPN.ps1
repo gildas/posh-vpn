@@ -116,7 +116,8 @@ function Connect-AnyConnect() # {{{
   $timer.Stop()
   if ($timer.Elapsed.TotalSeconds -ge $Timeout)
   {
-    Throw [System.TimeoutException] "Timeout ($Timeout seconds) while connecting to $ComputerName"
+    Write-Error "Timeout ($Timeout seconds) while connecting to $ComputerName"
+    return [PSCustomObject] @{}
   }
   Start-Process -FilePath (Get-Anyconnect -gui)
 
